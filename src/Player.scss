@@ -1,6 +1,7 @@
 video {
     width: 100%;
     height: auto;
+    margin-bottom: 20px;
 }
 
 .player-wrapper {
@@ -20,12 +21,16 @@ video {
     border-radius: 3px;
     cursor: move;
 
+    &.hidden {
+        display: none;
+    }
+
     textarea {
         resize: none;
         border: none;
         background: none;
-        margin: 2% 2%;
-        width: 96%;
-        height: 96%;
+        margin: 10px;
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
     }
 }

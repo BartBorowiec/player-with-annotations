@@ -7,7 +7,6 @@ class Player extends React.Component {
     componentDidMount() {
         $(".player-wrapper").droppable({
             drop: (event, ui) => {
-                console.log(this, event,ui)
                 this.addNewAnnotation({
                     top: event.offsetY,
                     left: event.offsetX
@@ -18,6 +17,17 @@ class Player extends React.Component {
         $("video").on("loadedmetadata", (e) => {
             this.props.saveDuration(e.target.duration);
         })
+        $("video").on("timeupdate",(e) => {
+            $(".annotation").each((id, element) => {
+                const arrayElement = this.props.annotations[id];
+                if (e.target.currentTime >= arrayElement.start 
+                    && e.target.currentTime <= arrayElement.start + arrayElement.duration) {
+                    $(element).removeClass("hidden");
+                } else {
+                    $(element).addClass("hidden");
+                }
+            });
+        });
         $(".annotation").draggable({
             containment: $(".player-wrapper")
         });
@@ -36,11 +46,12 @@ class Player extends React.Component {
 
     addNewAnnotation(position) {
         const {top, left} = position;
-        const annotation= {
+        const annotation = {
             top: top,
             left: left,
             text: "Enter text...",
-            duration: $("video").duration
+            start: 0,
+            duration: $("video")[0].duration
         }
         this.props.addNewAnnotation(annotation);
     }
@@ -54,7 +65,7 @@ class Player extends React.Component {
                         width="500px">        
                 </video>
                 {this.props.annotations.map((annotation, i)=> {
-                    return <div key={i} className="annotation" style={{
+                    return <div key={i} className="annotation hidden" style={{
                             top: annotation.top || 0,
                             left: annotation.left || 0
                         }}>

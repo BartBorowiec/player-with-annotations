@@ -1,15 +1,24 @@
 .annotations-list {
     width: 50%;
 }
-.annotation-inner {
+
+.annotation-outer {
+    width: 95%;
+    margin: 0 auto;
     border: 1px solid black;
+}
+.annotation-inner {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    height: 48px;
     cursor: move;
     
     textarea {
         resize: none;
-        display: block;
-        width: 96%;
+        display: inline-block;
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
         border: none;
-        margin: 10px 2%;
+        margin: 10px;
     }
 }

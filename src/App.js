@@ -1,4 +1,6 @@
 import React from 'react';
+import { scaleLinear } from 'd3-scale';
+import $ from 'jquery';
 import 'jquery-ui/ui/widgets/resizable';
 import 'jquery-ui/ui/widgets/droppable';
 import 'jquery-ui/ui/widgets/draggable';
@@ -14,7 +16,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      annotations: [{text:"Hello", top: 10, left: 10},{text:"world", top: 10, left: 100},{text:"!!!", top: 10, left: 200}]
+      annotations: [],
+      scale: null
     };
   }
   handleChange(e) {
@@ -30,10 +33,22 @@ class App extends React.Component {
     });
   }
   saveDuration(duration) {
+    const scale = scaleLinear().domain([0, duration]);
     this.setState({
-      duration: duration
+      scale: scale
     });
   }
+  updateAnnotationDuration(event, ui) {
+    const { scale } = this.state;
+    scale.range([0, $(event.target.closest(".annotation-outer")).width()])
+    const newArray = [...this.state.annotations];
+    newArray[event.target.dataset.id].start = scale.invert(ui.position.left);
+    newArray[event.target.dataset.id].duration = scale.invert(ui.position.left + ui.helper[0].getBoundingClientRect().width);
+    this.setState({
+      annotations: newArray
+    });
+  }
+
   render() {
     return (
       <div className="wrapper">
@@ -42,10 +57,12 @@ class App extends React.Component {
           handleChange={(e)=>this.handleChange(e)}
           addNewAnnotation={(annotation)=>this.addNewAnnotation(annotation)}
           annotations={this.state.annotations}>
-
         </Player>
         <ElementsBox></ElementsBox>
-        <AnnotationList handleChange={(e)=>this.handleChange(e)} annotations={this.state.annotations}></AnnotationList>
+        <AnnotationList updateAnnotationDuration={(event, ui) => this.updateAnnotationDuration(event, ui)}
+          handleChange={(e)=>this.handleChange(e)}
+          annotations={this.state.annotations}>
+        </AnnotationList>
       </div>
     );
   }

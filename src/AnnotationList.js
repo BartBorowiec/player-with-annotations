@@ -7,23 +7,31 @@ class AnnotationList extends React.Component {
     componentDidMount() {
         $(".annotation-inner").resizable({
             handles: "e, w",
-            containment: $(".annotations-list"),
-            minHeight: 30
+            containment: "parent",
+            minHeight: 30,
+            stop: (event, ui)=>{
+                
+            } 
         });
         $(".annotation-inner").draggable({
             axis: "x",
-            containment: $(".annotations-list")
+            containment: "parent"
         });
     }
     componentDidUpdate() {
         $(".annotation-inner").resizable({
             handles: "e, w",
-            containment: $(".annotations-list"),
-            minHeight: 28
+            containment: "parent",
+            stop: (event, ui)=>{
+                this.props.updateAnnotationDuration(event, ui)
+            } 
         });
         $(".annotation-inner").draggable({
             axis: "x",
-            containment: $(".annotations-list")
+            containment: "parent",
+            stop: (event, ui)=>{
+                this.props.updateAnnotationDuration(event, ui)
+            } 
         });
     }
     render() {
@@ -32,8 +40,7 @@ class AnnotationList extends React.Component {
                 {this.props.annotations.map((annotation, i) => {
                     return (
                         <div key={i} className="annotation-outer">
-                            {/* <textarea className="annotation-inner" defaultValue={annotation.text} onChange={(e)=>this.props.handleChange()}></textarea> */}
-                            <div className="annotation-inner">
+                            <div data-id={i} className="annotation-inner">
                                 <textarea data-id={i} value={annotation.text} onChange={(e)=>this.props.handleChange(e)}></textarea>
                             </div>
                         </div>
