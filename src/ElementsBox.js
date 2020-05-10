@@ -5,7 +5,6 @@ import './ElementsBox.scss';
 
 class ElementsBox extends React.Component {
     componentDidMount() {
-        console.log($(".elements-box"))
         $(".annotation-tile").draggable({
             helper: "clone"
         });
