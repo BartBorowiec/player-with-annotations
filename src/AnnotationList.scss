@@ -1,0 +1,15 @@
+.annotations-list {
+    width: 50%;
+}
+.annotation-inner {
+    border: 1px solid black;
+    cursor: move;
+    
+    textarea {
+        resize: none;
+        display: block;
+        width: 96%;
+        border: none;
+        margin: 10px 2%;
+    }
+}
